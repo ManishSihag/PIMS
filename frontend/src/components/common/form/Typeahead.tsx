@@ -4,12 +4,13 @@ import { getIn, useFormikContext } from 'formik';
 import * as React from 'react';
 import { useRef } from 'react';
 import { Form } from 'react-bootstrap';
-import { Typeahead, TypeaheadModel, TypeaheadProps } from 'react-bootstrap-typeahead';
+import { Typeahead } from 'react-bootstrap-typeahead';
 import styled from 'styled-components';
 
 import TooltipWrapper from '../TooltipWrapper';
+import { SelectOption } from './Select';
 
-export interface ITypeaheadFieldProps<T extends TypeaheadModel> extends TypeaheadProps<T> {
+export interface ITypeaheadFieldProps {
   name: string;
   label?: string;
   required?: boolean;
@@ -18,7 +19,7 @@ export interface ITypeaheadFieldProps<T extends TypeaheadModel> extends Typeahea
   /** Tooltip text */
   tooltip?: string;
   /** A function that takes in the value stored in formik and returns the corresponding label for that value. */
-  getOptionByValue?: (value?: any) => T[];
+  getOptionByValue?: (value?: any) => any[];
   /** pass a custom onChange to the TypeaheadField */
   onChange?: (vals: any) => void;
   /** pass a custom selection to the TypeaheadField */
@@ -37,13 +38,17 @@ export interface ITypeaheadFieldProps<T extends TypeaheadModel> extends Typeahea
   setClear?: Function;
   /** get the component to select the item with closest label match to the input provided */
   selectClosest?: boolean;
+  placeholder?: string;
+  inputProps?: Record<string, any>;
+  options: SelectOption[];
+  disabled?: boolean;
 }
 
 const Feedback = styled(Form.Control.Feedback)`
   display: block;
 `;
 
-export function TypeaheadField<T extends TypeaheadModel>({
+export function TypeaheadField({
   label,
   required,
   name,
@@ -59,8 +64,10 @@ export function TypeaheadField<T extends TypeaheadModel>({
   clearMenu,
   displayErrorTooltips,
   options,
+  placeholder,
+  inputProps,
   ...rest
-}: ITypeaheadFieldProps<T>) {
+}: ITypeaheadFieldProps) {
   const { touched, values, errors, setFieldTouched, setFieldValue } = useFormikContext();
   const hasError = !!getIn(touched, name) && !!getIn(errors, name);
   const isValid = !!getIn(touched, name) && !getIn(errors, name);
@@ -97,7 +104,7 @@ export function TypeaheadField<T extends TypeaheadModel>({
     }
   };
   if (!getOptionByValue) {
-    getOptionByValue = (value: T) => (!!value ? ([value] as T[]) : ([] as T[]));
+    getOptionByValue = (value: any) => (!!value ? ([value] as any[]) : ([] as any[]));
   }
 
   const ref = useRef<any>();
@@ -118,12 +125,12 @@ export function TypeaheadField<T extends TypeaheadModel>({
       {!!label && <Form.Label>{label}</Form.Label>}
       {!!tooltip && <TooltipIcon toolTipId="typeAhead-tip" toolTip={tooltip} />}
       <TooltipWrapper toolTipId={`${name}-error-tooltip}`} toolTip={errorTooltip}>
-        <Typeahead<T>
+        <Typeahead
           {...rest}
           options={options}
           inputProps={{
-            ...rest.inputProps,
-            name: name,
+            ...inputProps,
+            name,
             id: `${name}-field`,
             style: { width: '100%' },
           }}
@@ -137,7 +144,7 @@ export function TypeaheadField<T extends TypeaheadModel>({
           onChange={
             onChange
               ? onChange
-              : (newValues: T[]) => {
+              : (newValues: any[]) => {
                   setFieldValue(name, getIn(newValues[0], 'value') ?? newValues[0]);
                 }
           }
@@ -147,6 +154,7 @@ export function TypeaheadField<T extends TypeaheadModel>({
               : () => setFieldTouched(name, true)
           }
           id={`${name}-field`}
+          placeholder={placeholder ?? ''}
         />
       </TooltipWrapper>
       {hasError && !displayErrorTooltips && (
