@@ -9,6 +9,7 @@ import styled from 'styled-components';
 
 import TooltipWrapper from '../TooltipWrapper';
 import { SelectOption } from './Select';
+import { FilterByCallback, LabelKey } from 'react-bootstrap-typeahead/types/types';
 
 export interface ITypeaheadFieldProps {
   name: string;
@@ -42,6 +43,12 @@ export interface ITypeaheadFieldProps {
   inputProps?: Record<string, any>;
   options: SelectOption[];
   disabled?: boolean;
+  paginate?: boolean;
+  filterBy?: string[] | FilterByCallback;
+  multiple?: boolean;
+  maxResults?: number;
+  renderMenu?: unknown;
+  labelKey?: LabelKey;
 }
 
 const Feedback = styled(Form.Control.Feedback)`
@@ -66,6 +73,13 @@ export function TypeaheadField({
   options,
   placeholder,
   inputProps,
+  disabled,
+  paginate,
+  filterBy,
+  multiple,
+  maxResults,
+  renderMenu,
+  labelKey,
   ...rest
 }: ITypeaheadFieldProps) {
   const { touched, values, errors, setFieldTouched, setFieldValue } = useFormikContext();
@@ -120,6 +134,8 @@ export function TypeaheadField({
     }
   }, [clearMenu, clearSelected, setClear, name, setFieldValue]);
 
+  console.log('labelKey', labelKey);
+
   return (
     <Form.Group className={classNames(!!required ? 'required' : '', outerClassName)}>
       {!!label && <Form.Label>{label}</Form.Label>}
@@ -155,6 +171,13 @@ export function TypeaheadField({
           }
           id={`${name}-field`}
           placeholder={placeholder ?? ''}
+          paginate={paginate}
+          disabled={disabled}
+          multiple={multiple}
+          maxResults={maxResults}
+          filterBy={filterBy ?? ['name']}
+          renderMenu={renderMenu as any}
+          // labelKey={labelKey || (((option: SelectOption) => `${option.value}`) as LabelKey)}
         />
       </TooltipWrapper>
       {hasError && !displayErrorTooltips && (

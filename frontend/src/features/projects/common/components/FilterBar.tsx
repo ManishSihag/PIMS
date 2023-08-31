@@ -111,7 +111,7 @@ const FilterBar: React.FC<FilterBarProps> = ({ onChange, defaultFilter }) => {
                 placeholder="Location"
                 selectClosest
                 hideValidation={true}
-                options={adminAreas.map((x) => x.label)}
+                options={adminAreas}
                 onChange={(vals: any) => {
                   setFieldValue('administrativeArea', getIn(vals[0], 'name') ?? vals[0]);
                 }}

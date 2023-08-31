@@ -249,7 +249,7 @@ export const ParcelDetails: React.FC<any> = (props: IParcelDetailsProps) => {
           </Grid>
           <Grid item xs={rightColumnWidth} sx={rightColumnStyle}>
             <TypeaheadField
-              options={administrativeAreas.map((x) => x.label)}
+              options={administrativeAreas}
               name={withNameSpace('address.administrativeArea')}
               disabled={true}
               hideValidation={true}

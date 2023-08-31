@@ -7,6 +7,9 @@ import * as React from 'react';
 import { Col } from 'react-bootstrap';
 
 import { IAdminAreaFilter } from './interfaces';
+import { SelectOption } from '../../../components/common/form/Select';
+import { ILookupCode } from 'actions/ILookupCode';
+import { LabelKey } from 'react-bootstrap-typeahead/types/types';
 
 interface IAdminAreaFilterProps {
   /** The value being applied to the filter */
@@ -24,7 +27,17 @@ export const AdminAreaFilterBar: React.FC<IAdminAreaFilterProps> = ({
   handleAdd,
 }) => {
   const lookupCodes = useCodeLookups();
-  const adminAreas = lookupCodes.getByType(API.AMINISTRATIVE_AREA_CODE_SET_NAME);
+  const adminAreas: SelectOption[] = lookupCodes
+    .getByType(API.AMINISTRATIVE_AREA_CODE_SET_NAME)
+    .map((lookupCode: ILookupCode) => {
+      const selectOption: SelectOption = {
+        label: lookupCode.name,
+        value: lookupCode.name,
+        selected: false,
+        code: lookupCode.code,
+      };
+      return selectOption;
+    });
   return (
     <>
       <FilterBar<IAdminAreaFilter>
@@ -55,7 +68,7 @@ export const AdminAreaFilterBar: React.FC<IAdminAreaFilterProps> = ({
             options={adminAreas}
             placeholder="Enter name"
             filterBy={['name']}
-            labelKey={(option) => `${option.name}`}
+            labelKey={((option: SelectOption) => `${option.label}`) as LabelKey}
           />
         </Col>
       </FilterBar>

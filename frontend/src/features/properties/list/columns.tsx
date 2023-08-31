@@ -144,7 +144,7 @@ export const columns = (
         name: 'classificationId',
         placeholder: 'Filter by class',
         className: 'location-search',
-        options: propertyClassifications,
+        options: propertyClassifications as SelectOption[],
         labelKey: (option: SelectOption) => {
           return `${option.label}`;
         },

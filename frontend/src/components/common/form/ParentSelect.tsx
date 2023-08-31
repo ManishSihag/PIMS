@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import { Label } from '../Label';
 import { SelectOption, SelectOptions } from './Select';
 import { TypeaheadField } from './Typeahead';
+import { FilterByCallback, LabelKey } from 'react-bootstrap-typeahead/types/types';
 
 /** this styled component is used to help conditionally apply bold font weight to items that have been assigned the bold-item className */
 const StyledMenuItemsDiv = styled.div`
@@ -25,7 +26,7 @@ interface IParentSelect {
   /** if you would like placeholder text within the input */
   placeholder?: string;
   /** filterBy is optional - if used can determine what you can filter with */
-  filterBy?: string[];
+  filterBy?: string[] | FilterByCallback;
   /** provide the opitional label text*/
   label?: string;
   /** flag used to control whehter to display red astrix indicating required */
@@ -118,7 +119,7 @@ export const ParentSelect: React.FC<IParentSelect> = ({
         selectClosest={selectClosest}
         setClear={setClear}
         name={field}
-        labelKey={(option) => `${option.label}`}
+        labelKey={((option: SelectOption) => `${option.label}`) as LabelKey}
         onChange={(vals: any) => {
           if (enableMultiple) {
             setMultiSelections(vals);
@@ -141,21 +142,22 @@ export const ParentSelect: React.FC<IParentSelect> = ({
         placeholder={placeholder}
         hideValidation
         required={required}
-        renderMenu={(results, menuProps) => {
-          const parents = results.filter((x) => !x.parentId);
+        renderMenu={(results: SelectOption[], menuProps: any) => {
+          const parents = results.filter((x: SelectOption) => !x.parentId);
           const childless = parents.filter(
-            (p) => !results.find((r) => Number(r.parentId) === Number(p.value)),
+            (p: SelectOption) =>
+              !results.find((r: SelectOption) => Number(r.parentId) === Number(p.value)),
           );
 
           // This assigns a specific id to childless parent agencies
           // Headers will not be displayed for these childless parent agencies but they will be displayed as regular options and grouped
-          results = results.map((x) => {
+          results = results.map((x: SelectOption) => {
             return {
               ...x,
-              parentId: !!childless.find((c) => Number(c.value) === Number(x.value))
+              parentId: !!childless.find((c: SelectOption) => Number(c.value) === Number(x.value))
                 ? CHILDLESS_PARENT_ID
                 : x.parentId,
-              parent: !!childless.find((c) => Number(c.value) === Number(x.value))
+              parent: !!childless.find((c: SelectOption) => Number(c.value) === Number(x.value))
                 ? 'Childless'
                 : x.parent,
             };
@@ -175,13 +177,13 @@ export const ParentSelect: React.FC<IParentSelect> = ({
                       onClick={() =>
                         enableMultiple
                           ? handleMultiSelectHeaderClick(
-                              results.filter((x) => x.parentId === +parentId),
+                              results.filter((x: SelectOption) => x.parentId === +parentId),
                             )
                           : handleMenuHeaderClick(options.find((x) => x.value === parentId)!)
                       }
                     >
                       <b style={{ cursor: 'pointer' }}>
-                        {results.find((x) => x.parentId === +parentId)?.parent}
+                        {results.find((x: SelectOption) => x.parentId === +parentId)?.parent}
                       </b>
                     </Menu.Header>
                   )}

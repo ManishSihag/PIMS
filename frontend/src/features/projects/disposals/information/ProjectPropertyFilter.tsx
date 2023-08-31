@@ -81,7 +81,7 @@ export const ProjectPropertyFilter: React.FC<IProjectPropertyFilterProps> = ({
           placeholder="Location"
           selectClosest
           hideValidation={true}
-          options={adminAreas.map((x) => x.label)}
+          options={adminAreas}
           onChange={(items) => {
             if (!!items.length)
               setFieldValue('filter', { ...filter, administrativeArea: items[0] });

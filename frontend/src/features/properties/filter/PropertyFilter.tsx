@@ -213,7 +213,7 @@ export const PropertyFilter: React.FC<IPropertyFilterProps> = ({
                     });
                   }}
                   options={options}
-                  onChange={(newValues: string[]) => {
+                  onChange={(newValues: any[]) => {
                     setFieldValue('name', getIn(newValues[0], 'value') ?? newValues[0]);
                   }}
                   ref={ref}
@@ -229,7 +229,7 @@ export const PropertyFilter: React.FC<IPropertyFilterProps> = ({
                   placeholder="Location"
                   selectClosest
                   hideValidation={true}
-                  options={adminAreas.map((x) => x.label)}
+                  options={adminAreas}
                   onChange={(vals: any) => {
                     setFieldValue('administrativeArea', getIn(vals[0], 'name') ?? vals[0]);
                   }}

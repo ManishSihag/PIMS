@@ -77,12 +77,15 @@ export const ManageAdminAreas = () => {
   const [filter, setFilter] = useState<IAdminAreaFilter>({});
   const onRequestData = useCallback(
     async ({ pageIndex }: { pageIndex: number }) => {
-      if (!!filter) {
+      if (filter) {
+        console.log('filter exists', filter.name);
         const response = await api.getAdminAreas({
           page: filter.id ? 0 : pageIndex + 1,
           name: (filter?.id as any)?.name,
         });
+        console.log(response);
         setAreas(response.items);
+        console.log('areas', areas);
       }
     },
     [filter],
@@ -97,8 +100,11 @@ export const ManageAdminAreas = () => {
           handleAdd={() => navigate('/admin/administrativeArea/new')}
           onChange={(value) => {
             if ((value as any).id) {
+              console.log('value', value);
               setFilter({ ...filter, id: (value as any).id });
+              console.log('filter', filter);
             } else {
+              console.log('no value');
               setFilter({ ...initialValues, name: undefined });
             }
           }}

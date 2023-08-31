@@ -49,7 +49,7 @@ export const GreTransferForm = ({ canEdit }: { canEdit: boolean }) => {
             data-testid="transfer-to-agency"
             options={agencyOptions}
             name="agencyId"
-            labelKey="label"
+            // labelKey="label"
             paginate={false}
             required
             getOptionByValue={(value: number) => {

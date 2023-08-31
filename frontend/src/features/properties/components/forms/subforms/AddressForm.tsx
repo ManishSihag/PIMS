@@ -132,7 +132,7 @@ const AddressForm = <T,>(props: AddressProps & FormikProps<T>) => {
         )}
         <Col md="auto">
           <TypeaheadField
-            options={administrativeAreas.map((x) => x.label)}
+            options={administrativeAreas}
             name={withNameSpace('administrativeArea')}
             disabled={props.disabled}
             hideValidation={props.disableCheckmark}
