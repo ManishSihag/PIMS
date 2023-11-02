@@ -293,6 +293,7 @@ namespace Pims.Api
         /// <param name="app"></param>
         /// <param name="env"></param>
         /// <param name="provider"></param>
+        /// <summary>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)
         {
             app.UseMetricServer();
@@ -356,3 +357,5 @@ namespace Pims.Api
         #endregion
     }
 }
+
+
