@@ -65,4 +65,3 @@ RUN chmod g+rwx /var/cache/nginx /var/run /var/log/nginx
 
 # Run nginx with global directives and daemon off
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
-#
