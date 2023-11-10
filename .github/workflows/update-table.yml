@@ -19,6 +19,9 @@ jobs:
           #Clone wiki repo
           echo "Cloning wiki repo https://github.com/$GITHUB_REPOSITORY.wiki.git"
           git clone "https://$GITHUB_ACTOR:$GH_TOKEN@github.com/$GITHUB_REPOSITORY.wiki.git" ./wiki
+          ls 
+          cd wiki
+          ls
 
 
       - name: Update Wiki Table
