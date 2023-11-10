@@ -25,7 +25,7 @@ jobs:
             const fs = require('fs');
 
             // Read the current content of the Wiki page
-            const wikiPath = '/home/runner/work/PIMS/PIMS/wiki/image-tags.md';
+            const wikiPath = './wiki/image-tags.md';
             let wikiContent = fs.readFileSync(wikiPath, 'utf-8');
 
             // Parse the table content
