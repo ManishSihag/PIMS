@@ -1,0 +1,44 @@
+name : Update table in wiki
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: 'Image Tag'
+        required: true
+
+env:
+  IMAGE_TAG: ${{ github.event.inputs.image_tag }}
+    
+jobs:
+  update-wiki-table:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Update Wiki Table
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+
+            // Read the current content of the Wiki page
+            const wikiPath = '/home/runner/work/PIMS/PIMS/wiki/image-tags.md';
+            let wikiContent = fs.readFileSync(wikiPath, 'utf-8');
+
+            // Parse the table content
+            let tableRows = wikiContent.split('\n');
+            let apiRow = tableRows[2].split('|');
+            
+            // Update the value in Row 1, Col 2
+            apiRow[3] = ` ${process.env.IMAGE_TAG} `;  // Use the dynamic value from the GitHub Action output
+            
+            // Assemble the updated table
+            tableRows[2] = apiRow.join('|');
+            let updatedContent = tableRows.join('\n');
+
+            // Write the updated content back to the Wiki page
+            fs.writeFileSync(wikiPath, updatedContent);
+
