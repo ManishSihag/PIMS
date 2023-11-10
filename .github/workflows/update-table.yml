@@ -29,7 +29,7 @@ jobs:
             const fs = require('fs');
 
             // Read the current content of the Wiki page
-            const wikiPath = './wiki/image-tags.md';
+            const wikiPath = '/home/runner/work/PIMS/PIMS/wiki/image-tags.md';
             let wikiContent = fs.readFileSync(wikiPath, 'utf-8');
 
             // Parse the table content
@@ -48,7 +48,7 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          cd ./wiki
+          cd ./home/runner/work/PIMS/PIMS/wiki
           git config --local user.email "$email"
           git config --local user.name "$author" 
           git add .
