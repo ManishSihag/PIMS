@@ -14,44 +14,32 @@ jobs:
   update-wiki-table:
     runs-on: ubuntu-latest
     steps:
-      - name : Clone wiki
+      - name : Clone wiki and update table
         run: |
           #Clone wiki repo
           echo "Cloning wiki repo https://github.com/$GITHUB_REPOSITORY.wiki.git"
           git clone "https://$GITHUB_ACTOR:$GH_TOKEN@github.com/$GITHUB_REPOSITORY.wiki.git" ./wiki
-          ls 
-          cd wiki
-          ls
 
+          WIKI_PATH="./wiki/image-tags.md"
 
-      - name: Update Wiki Table
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const fs = require('fs');
+          # Read the current content of the Wiki page
+          WIKI_CONTENT=$(<"$WIKI_PATH")
+          
+          # Parse the table content
+          IFS=$'\n' read -ra TABLE_ROWS <<< "$WIKI_CONTENT"
+          API_ROW=(${TABLE_ROWS[2]//|/ })
+          
+          # Update the value in Row 1, Col 2
+          API_ROW[3]=" ${IMAGE_TAG} "  # Use the dynamic value from the GitHub Action output
+          
+          # Assemble the updated table
+          TABLE_ROWS[2]=$(IFS=\|; echo "${API_ROW[*]}")
+          UPDATED_CONTENT=$(IFS=$'\n'; echo "${TABLE_ROWS[*]}")
+          
+          # Write the updated content back to the Wiki page
+          echo "$UPDATED_CONTENT" > "$WIKI_PATH"
 
-            // Read the current content of the Wiki page
-            const wikiPath = './wiki/image-tags.md';
-            let wikiContent = fs.readFileSync(wikiPath, 'utf-8');
-
-            // Parse the table content
-            let tableRows = wikiContent.split('\n');
-            let apiRow = tableRows[2].split('|');
-            
-            // Update the value in Row 1, Col 2
-            apiRow[3] = ` ${process.env.IMAGE_TAG} `;  // Use the dynamic value from the GitHub Action output
-            
-            // Assemble the updated table
-            tableRows[2] = apiRow.join('|');
-            let updatedContent = tableRows.join('\n');
-
-            // Write the updated content back to the Wiki page
-            fs.writeFileSync(wikiPath, updatedContent);
-
-      - name: Commit and push changes
-        run: |
-          cd ./home/runner/work/PIMS/PIMS/wiki
+          cd ./wiki
           git config --local user.email "$email"
           git config --local user.name "$author" 
           git add .
