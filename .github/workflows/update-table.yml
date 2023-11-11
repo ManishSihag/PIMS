@@ -23,7 +23,7 @@ jobs:
           cd wiki
           ls
 
-          WIKI_PATH="./image-tags.md"
+          WIKI_PATH="./Image-tags.md"
 
           # Read the current content of the Wiki page
           WIKI_CONTENT=$(<"$WIKI_PATH")
