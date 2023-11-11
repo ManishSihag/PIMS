@@ -19,8 +19,11 @@ jobs:
           #Clone wiki repo
           echo "Cloning wiki repo https://github.com/$GITHUB_REPOSITORY.wiki.git"
           git clone "https://$GITHUB_ACTOR:$GH_TOKEN@github.com/$GITHUB_REPOSITORY.wiki.git" ./wiki
+          ls
+          cd wiki
+          ls
 
-          WIKI_PATH="wiki/image-tags.md"
+          WIKI_PATH="./image-tags.md"
 
           # Read the current content of the Wiki page
           WIKI_CONTENT=$(<"$WIKI_PATH")
@@ -39,7 +42,6 @@ jobs:
           # Write the updated content back to the Wiki page
           echo "$UPDATED_CONTENT" > "$WIKI_PATH"
 
-          cd wiki
           git config --local user.email "$email"
           git config --local user.name "$author" 
           git add .
