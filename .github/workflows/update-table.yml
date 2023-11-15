@@ -43,6 +43,7 @@ jobs:
           echo "$UPDATED_CONTENT" > "$WIKI_PATH"
 
           echo "$GITHUB_ACTOR"
+          echo "$GH_TOKEN"
 
           git config user.name "$GITHUB_ACTOR"
           git config user.email "manish.sihag@yahoo.com"
