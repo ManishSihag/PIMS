@@ -15,43 +15,18 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ github.token }}
+      
     steps:
-      - name : Clone wiki and update table
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Clone wiki repository
         run: |
-          #Clone wiki repo
           echo "Cloning wiki repo https://github.com/$GITHUB_REPOSITORY.wiki.git"
           git clone "https://$GITHUB_ACTOR:$GH_TOKEN@github.com/$GITHUB_REPOSITORY.wiki.git" ./wiki
+      
+      - name: print current directory
+        run: |
           ls
           cd wiki
           ls
-
-          WIKI_PATH="./Image-tags.md"
-
-          # Read the current content of the Wiki page
-          WIKI_CONTENT=$(<"$WIKI_PATH")
-          
-          # Parse the table content
-          IFS=$'\n' read -ra TABLE_ROWS <<< "$WIKI_CONTENT"
-          API_ROW=(${TABLE_ROWS[2]//|/ })
-          
-          # Update the value in Row 1, Col 2
-          API_ROW[3]=" ${IMAGE_TAG} "  # Use the dynamic value from the GitHub Action output
-          
-          # Assemble the updated table
-          TABLE_ROWS[2]=$(IFS=\|; echo "${API_ROW[*]}")
-          UPDATED_CONTENT=$(IFS=$'\n'; echo "${TABLE_ROWS[*]}")
-          
-          # Write the updated content back to the Wiki page
-          echo "$UPDATED_CONTENT" > "$WIKI_PATH"
-
-          git config user.name "$GITHUB_ACTOR"
-          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
-          git add .
-          if git diff-index --quiet HEAD; then
-            echo "Nothing changed"
-            exit 0
-          fi
-
-          echo "Pushing changes to wiki"
-          git commit -m "value ploulated at image build api" && git push "https://$GITHUB_ACTOR:$GH_TOKEN@github.com/$GITHUB_REPOSITORY.wiki.git"
-
