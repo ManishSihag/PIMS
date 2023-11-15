@@ -45,7 +45,7 @@ jobs:
           echo "$GITHUB_ACTOR"
 
           git config user.name "$GITHUB_ACTOR"
-          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+          git config user.email "manish.sihag@yahoo.com"
           git add .
           if git diff-index --quiet HEAD; then
             echo "Nothing changed"
