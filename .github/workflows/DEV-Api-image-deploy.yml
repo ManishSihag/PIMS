@@ -6,7 +6,7 @@ on:
       - closed
     branches: [main]
     paths:
-      - 'backend/**' # Triggers on changes to files in the frontend/ directory.  
+      - 'backend/**' # Triggers on changes to files in the backend/ directory.  
 
 
 jobs:
