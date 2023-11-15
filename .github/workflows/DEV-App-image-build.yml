@@ -1,4 +1,4 @@
-name: App Image Build on PR
+name: DEV APP-:Image Build on PR
 
 on:
   pull_request:
@@ -14,7 +14,7 @@ jobs:
     steps:
       # check out the repo
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
         
@@ -55,7 +55,7 @@ jobs:
       
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Clone wiki repository
         run: |
