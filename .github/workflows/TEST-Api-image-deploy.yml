@@ -1,4 +1,4 @@
-name : TEST API-:Image Deploy on PR merge
+name : TEST API - Promote Api Changes to TEST
 
 on:
   workflow_dispatch:
