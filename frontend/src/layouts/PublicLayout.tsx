@@ -14,6 +14,7 @@ const PublicLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
   if (window.location.href.includes('localhost')) environment = 'local';
   else if (window.location.href.includes('pims-dev')) environment = 'development';
   else if (window.location.href.includes('pims-test')) environment = 'testing';
+  else if (window.location.href.includes('pims-dev-sandbox')) environment = 'sandbox';
 
   return (
     <>
@@ -24,6 +25,7 @@ const PublicLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
             { 'dev-environment': environment === 'development' },
             { 'test-environment': environment === 'testing' },
             { 'local-environment': environment === 'local' },
+            { 'sandbox-environment': environment === 'sandbox' },
             'header-layout',
             'fixed-top',
           )}
