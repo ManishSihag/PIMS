@@ -47,6 +47,7 @@ jobs:
 
       
   Update_Wiki_Tags:
+    if: github.event.action == 'opened'
     needs: [PIMS-APP-Build-Tag-Push]
     name : Update table in wiki
     runs-on: ubuntu-latest
