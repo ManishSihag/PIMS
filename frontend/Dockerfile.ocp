@@ -3,7 +3,7 @@ FROM image-registry.apps.silver.devops.gov.bc.ca/ec1236-tools/nodejs:18.17.1-bul
 # Set the working directory to /app
 WORKDIR /app
 ENV NODE_ENV=production
-
+# new comment
 # Copy files
 COPY ./src ./src
 COPY ./public ./public
