@@ -47,7 +47,6 @@ jobs:
 
       
   Update_Wiki_Tags:
-    if: github.event.action == 'opened'
     needs: [PIMS-APP-Build-Tag-Push]
     name : Update table in wiki
     runs-on: ubuntu-latest
@@ -85,6 +84,7 @@ jobs:
           git commit -m "value ploulated at image build api" && git push "https://$GITHUB_ACTOR:$GH_TOKEN@github.com/$GITHUB_REPOSITORY.wiki.git"
 
       - name: Add Comment To the PR
+        if: github.event.action == 'opened'
         uses: actions/github-script@v6
         with:
           script: |
