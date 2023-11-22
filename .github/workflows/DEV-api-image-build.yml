@@ -59,13 +59,13 @@ jobs:
         - name: Tag Migration Image
           if: steps.migration.outputs.migration_needed == 'true'
           run: |
-            docker tag pims-migration:latest ${{ secrets.PUBLIC_IMAGE_REPOSITORY }}/${{ secrets.OPENSHIFT_TOOLS_NAMESPACE }}/pims-migration:latest
+            docker tag pims-migrations:latest ${{ secrets.PUBLIC_IMAGE_REPOSITORY }}/${{ secrets.OPENSHIFT_TOOLS_NAMESPACE }}/pims-migrations:latest
 
         # push the migration image
         - name: Push Migration Image
           if: steps.migration.outputs.migration_needed == 'true'
           run: |
-            docker push ${{ secrets.PUBLIC_IMAGE_REPOSITORY }}/${{ secrets.OPENSHIFT_TOOLS_NAMESPACE }}/pims-migration:latest
+            docker push ${{ secrets.PUBLIC_IMAGE_REPOSITORY }}/${{ secrets.OPENSHIFT_TOOLS_NAMESPACE }}/pims-migrations:latest
 
         # Push the API Image
         - name: Push API Image
