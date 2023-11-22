@@ -21,7 +21,7 @@ env:
 jobs:
   # Job to deploy APP image to OpenShift
   Deploy-To-OpenShift:
-    if: ${{ github.event_name != 'workflow_dispatch' && github.event.pull_request.merged }}
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.pull_request.merged }}
     name: Deploy to OpenShift
     runs-on: ubuntu-latest
   
