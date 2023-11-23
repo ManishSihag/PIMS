@@ -14,9 +14,14 @@ on:
         image_tag:
           description: 'Image Tag to deploy'
           required: true
+        
+        migration_tag:
+          description: 'Migration Tag'
+          required: false
 
 env:
   IMAGE_TAG: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.image_tag || github.event.pull_request.number }}
+  MIGRATION_IMAGE : ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.migration_tag || github.event.pull_request.number }}
 
 jobs:
   # Job to deploy API image to OpenShift
@@ -52,7 +57,7 @@ jobs:
       
       # run migration if needed
       - name: Migration Run
-        if: steps.migration.outputs.migration_needed == 'true'
+        if: github.event.inputs.migration_tag || steps.migration.outputs.migration_needed == 'true'
         env:
           NAMESPACE: "${{ secrets.OPENSHIFT_DEV_NAMESPACE }}"
           TOOLS_NAMESPACE: "${{ secrets.OPENSHIFT_TOOLS_NAMESPACE }}"
@@ -155,7 +160,7 @@ jobs:
 
        # Run update wiki python script for Migration If needed
       - name: Update wiki for Migration If needed
-        if: needs.Deploy-To-OpenShift.outputs.migration == 'true'
+        if: github.event.inputs.migration_tag || needs.Deploy-To-OpenShift.outputs.migration == 'true'
         run: python ./.github/helpers/update-wiki-table.py ./wiki/Image-tags.md MIGRATION "Latest Build Image Tag" "${{github.event.pull_request.number}}"
       
       # Commit and push changes to wiki
