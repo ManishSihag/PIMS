@@ -24,7 +24,8 @@ jobs:
     if: ${{ github.event_name == 'workflow_dispatch' || github.event.pull_request.merged }}
     name: Deploy to OpenShift
     runs-on: ubuntu-latest
-
+    outputs:
+          migration: ${{ steps.migration.outputs.migration_needed }} 
     steps:
       # Checkout the repository
       - name: Checkout Repository
@@ -33,12 +34,13 @@ jobs:
 
       # Check for migration files
       - name: Check for migration files
+        if: ${{ github.event_name != 'workflow_dispatch'}}
         id: migration
         run: |
           if git diff --name-only HEAD^ | grep -q "backend/dal/Migrations"; then
-            echo "::set-output name=migration_needed::true"
+            echo "migration_needed=true" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=migration_needed::false"
+            echo "migration_needed=false" >> $GITHUB_OUTPUT
           fi
     
       - name: Login to OpenShift
@@ -50,12 +52,12 @@ jobs:
       
       # run migration if needed
       - name: Migration Run
-        if: steps.migration.outputs.migration_needed == 'true' 
+        if: steps.migration.outputs.migration_needed == 'true'
         env:
           NAMESPACE: "${{ secrets.OPENSHIFT_DEV_NAMESPACE }}"
           TOOLS_NAMESPACE: "${{ secrets.OPENSHIFT_TOOLS_NAMESPACE }}"
           IMAGE_REPOSITORY : ${{ secrets.PUBLIC_IMAGE_REPOSITORY }}
-          IMAGE_TAG: "latest"
+          IMAGE_TAG: ${{ env.IMAGE_TAG }}
           MIGRATION_IMAGE: "pims-migrations"
           DB_NAME: "pims-database"
         run: |
@@ -124,7 +126,7 @@ jobs:
 
   # Job to update the wiki with deployed image tag information
   Update_Wiki_Tags:
-    needs: [Health-Check]
+    needs: [Health-Check, Deploy-To-OpenShift]
     name: Update table in wiki
     runs-on: ubuntu-latest
     env:
@@ -151,6 +153,11 @@ jobs:
       - name: Run update wiki python script
         run: python ./.github/helpers/update-wiki-table.py ./wiki/Image-tags.md API "Deployed Image Tag in DEV" "${{ env.IMAGE_TAG }}"
 
+       # Run update wiki python script for Migration If needed
+      - name: Update wiki for Migration If needed
+        if: needs.Deploy-To-OpenShift.outputs.migration == 'true'
+        run: python ./.github/helpers/update-wiki-table.py ./wiki/Image-tags.md MIGRATION "Latest Build Image Tag" "${{github.event.pull_request.number}}"
+      
       # Commit and push changes to wiki
       - name: Commit and push changes to wiki
         run: |
