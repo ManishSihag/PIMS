@@ -1,4 +1,5 @@
-name: DEV API-:Image Deploy on PR merge
+# GitHub Actions workflow for deploying API image on PR merge to main branch
+name: DEV API-Image Deploy on PR merge
 
 on:
   pull_request:
@@ -6,18 +7,39 @@ on:
       - closed
     branches: [main]
     paths:
-      - 'backend/**' # Triggers on changes to files in the backend/ directory.  
+      - 'backend/**' # Triggers on changes to files in the backend/ directory.
 
+  workflow_dispatch:
+      inputs:
+        image_tag:
+          description: 'Image Tag to deploy'
+          required: true
+
+env:
+  IMAGE_TAG: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.image_tag || github.event.pull_request.number }}
 
 jobs:
+  # Job to deploy API image to OpenShift
   Deploy-To-OpenShift:
-    if: ${{ github.event.pull_request.merged }}
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.pull_request.merged }}
     name: Deploy to OpenShift
     runs-on: ubuntu-latest
-  
+
     steps:
+      # Checkout the repository
       - name: Checkout Repository
-        uses: actions/checkout@v3 
+        uses: actions/checkout@v3
+
+
+      # Check for migration files
+      - name: Check for migration files
+        id: migration
+        run: |
+          if git diff --name-only HEAD^ | grep -q "backend/dal/Migrations"; then
+            echo "::set-output name=migration_needed::true"
+          else
+            echo "::set-output name=migration_needed::false"
+          fi
     
       - name: Login to OpenShift
         uses: redhat-actions/oc-login@v1
@@ -25,24 +47,39 @@ jobs:
           openshift_server_url: ${{ secrets.OPENSHIFT_SERVER_URL }}
           openshift_token: ${{ secrets.OPENSHIFT_SA_DEV_TOKEN }}
           namespace: ${{ secrets.OPENSHIFT_DEV_NAMESPACE }}
+      
+      # run migration if needed
+      - name: Migration Run
+        if: steps.migration.outputs.migration_needed == 'true' 
+        with:
+          NAMESPACE: "${{ secrets.OPENSHIFT_DEV_NAMESPACE }}"
+          TOOLS_NAMESPACE: "${{ secrets.OPENSHIFT_TOOLS_NAMESPACE }}"
+          IMAGE_REPOSITORY : ${{ secrets.PUBLIC_IMAGE_REPOSITORY }}
+          IMAGE_TAG: "latest"
+          MIGRATION_IMAGE: "pims-migrations"
+          DB_NAME: "pims-database"
+        run: |
+          ./.github/helpers/migration.sh
 
+      # Process and Apply API DeploymentConfig
       - name: Process and Apply API DeploymentConfig
         env:
-          NAMESPACE: "${{ secrets.OPENSHIFT_DEV_NAMESPACE }}"
-          DC_TEMPLATE: "app-dc-template.yaml"
-          IMAGE_TAG: ${{github.event.pull_request.number}}
-          ENVIRONMENT: "dev"
-          APPLICATION_NAME: "pims-api"
-          LICENSE_PLATE: "${{ secrets.LICENSE_PLATE }}"
+          NAMESPACE: '${{ secrets.OPENSHIFT_DEV_NAMESPACE }}'
+          DC_TEMPLATE: 'api-dc-template.yaml'
+          IMAGE_TAG: ${{ env.IMAGE_TAG }}
+          ENVIRONMENT: 'dev'
+          APPLICATION_NAME: 'pims-api'
+          LICENSE_PLATE: '${{ secrets.LICENSE_PLATE }}'
         run: |
-          ./.github/helpers/deploy.sh 
+          ./.github/helpers/deploy.sh
 
-            
+  # Job to check the health of the deployed API
   Health-Check:
     name: Check Deployment Health
     runs-on: ubuntu-latest
-    needs: [ Deploy-To-OpenShift ]
+    needs: [Deploy-To-OpenShift]
     steps:
+      # Login to OpenShift
       - name: Login to OpenShift
         uses: redhat-actions/oc-login@v1
         env:
@@ -53,15 +90,18 @@ jobs:
           openshift_token: ${{ secrets.OPENSHIFT_SA_DEV_TOKEN }}
           namespace: ${{ secrets.OPENSHIFT_DEV_NAMESPACE }}
 
+      # Check Deployment Status
       - name: Check Deployment Status
         run: |
           oc rollout status -n ${{ secrets.OPENSHIFT_DEV_NAMESPACE }} dc/pims-api --watch
 
+  # Job to clean up previous objects in OpenShift
   Clean-Up:
     name: Clean Up
     runs-on: ubuntu-latest
-    needs: [ Health-Check ]
+    needs: [Health-Check]
     steps:
+      # Login to OpenShift
       - name: Login to OpenShift
         uses: redhat-actions/oc-login@v1
         env:
@@ -72,38 +112,46 @@ jobs:
           openshift_token: ${{ secrets.OPENSHIFT_SA_DEV_TOKEN }}
           namespace: ${{ secrets.OPENSHIFT_DEV_NAMESPACE }}
 
+      # Remove previous objects
       - name: Remove previous objects
         run: |
           oc delete pod -n ${{ secrets.OPENSHIFT_DEV_NAMESPACE }} --field-selector status.phase=Succeeded
 
+      # Remove previous replication controllers
       - name: Remove previous replication controllers
         run: |
           oc delete rc -n ${{ secrets.OPENSHIFT_DEV_NAMESPACE }} --field-selector status.replicas=0
 
+  # Job to update the wiki with deployed image tag information
   Update_Wiki_Tags:
-    needs: [ Health-Check ]
-    name : Update table in wiki
+    needs: [Health-Check]
+    name: Update table in wiki
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ github.token }}
-      
+
     steps:
+      # Checkout the repository
       - name: Checkout
         uses: actions/checkout@v3
 
+      # Clone wiki repository
       - name: Clone wiki repository
         run: |
           echo "Cloning wiki repo https://github.com/$GITHUB_REPOSITORY.wiki.git"
           git clone "https://$GITHUB_ACTOR:$GH_TOKEN@github.com/$GITHUB_REPOSITORY.wiki.git" ./wiki
       
-      - name: Setup pyhton
+      # Setup Python
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10' 
 
+      # Run update wiki python script
       - name: Run update wiki python script
-        run: python ./.github/helpers/update-wiki-table.py ./wiki/Image-tags.md API "Deployed Image Tag in DEV" "${{github.event.pull_request.number}}"
+        run: python ./.github/helpers/update-wiki-table.py ./wiki/Image-tags.md API "Deployed Image Tag in DEV" "${{ env.IMAGE_TAG }}"
 
+      # Commit and push changes to wiki
       - name: Commit and push changes to wiki
         run: |
           cd ./wiki
@@ -115,4 +163,4 @@ jobs:
             exit 0
           fi
           echo "Pushing changes to wiki"
-          git commit -m "value ploulated at Deploy api" && git push "https://$GITHUB_ACTOR:$GH_TOKEN@github.com/$GITHUB_REPOSITORY.wiki.git"
+          git commit -m "Value populated at Deploy API" && git push "https://$GITHUB_ACTOR:$GH_TOKEN@github.com/$GITHUB_REPOSITORY.wiki.git"
