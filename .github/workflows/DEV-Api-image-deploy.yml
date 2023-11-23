@@ -51,7 +51,7 @@ jobs:
       # run migration if needed
       - name: Migration Run
         if: steps.migration.outputs.migration_needed == 'true' 
-        with:
+        env:
           NAMESPACE: "${{ secrets.OPENSHIFT_DEV_NAMESPACE }}"
           TOOLS_NAMESPACE: "${{ secrets.OPENSHIFT_TOOLS_NAMESPACE }}"
           IMAGE_REPOSITORY : ${{ secrets.PUBLIC_IMAGE_REPOSITORY }}
