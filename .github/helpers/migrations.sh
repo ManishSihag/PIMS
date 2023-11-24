@@ -15,9 +15,11 @@ jsonpath='{.data.DB_PASSWORD}' | base64 -d)
 
 echo "Running database migration in $NAMESPACE"
 
+echo oc run $MIGRATION_IMAGE \ -n $NAMESPACE \ --image=$IMAGE} \ --image-pull-policy=Always \ --attach \ --rm \ --labels='role=migration,solution=pims,app=database' \ --restart=Never \ --env=ASPNETCORE_ENVIRONMENT=Production \ --env=ConnectionStrings__PIMS="${DB_CS}" \ --env=DB_PASSWORD=${DB_PASSWORD} \ --timeout=10m
+
 oc run $MIGRATION_IMAGE \
 -n $NAMESPACE \
---image=${IMAGE} \
+--image=$IMAGE} \
 --image-pull-policy=Always \
 --attach \
 --rm \
@@ -26,4 +28,3 @@ oc run $MIGRATION_IMAGE \
 --env=ASPNETCORE_ENVIRONMENT=Production \
 --env=ConnectionStrings__PIMS="${DB_CS}" \
 --env=DB_PASSWORD=${DB_PASSWORD} \
---timeout=10m
