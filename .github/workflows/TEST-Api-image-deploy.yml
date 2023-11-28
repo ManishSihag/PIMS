@@ -1,5 +1,5 @@
 # GitHub Actions workflow for deploying API image on PR merge to main branch
-name: DEV API-Image Deploy on PR merge
+name: TEST API-Image Deploy on PR merge
 
 on:
   workflow_dispatch:
