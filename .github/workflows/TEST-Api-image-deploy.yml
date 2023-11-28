@@ -1,4 +1,4 @@
-# GitHub Actions workflow for deploying API image on PR merge to main branch
+# GitHub Actions workflow for deploying API image to TEST env
 name: TEST API-Image Deploy on PR merge
 
 on:
