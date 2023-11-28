@@ -36,13 +36,13 @@ jobs:
         with:
           openshift_server_url: ${{ secrets.OPENSHIFT_SERVER_URL }}
           openshift_token: ${{env.OPENSHIFT_TOKEN}}
-          namespace: ${{ secrets.LICENSE_PLATE + env.ENVIRONMENT }}
+          namespace: ${{ format('{0}{1}', secrets.LICENSE_PLATE, env.ENVIRONMENT) }}
       
       # run migration if needed
       - name: Migration Run
         if: github.event.inputs.migration_tag 
         env:
-          NAMESPACE: ${{ secrets.LICENSE_PLATE + env.ENVIRONMENT }}
+          NAMESPACE: ${{ format('{0}{1}', secrets.LICENSE_PLATE, env.ENVIRONMENT) }}
           TOOLS_NAMESPACE: "${{ secrets.OPENSHIFT_TOOLS_NAMESPACE }}"
           IMAGE_REPOSITORY : ${{ secrets.PUBLIC_IMAGE_REPOSITORY }}
           IMAGE_TAG: ${{ env.IMAGE_TAG }}
@@ -54,7 +54,7 @@ jobs:
       # Process and Apply API DeploymentConfig
       - name: Process and Apply API DeploymentConfig
         env:
-          NAMESPACE: ${{ secrets.LICENSE_PLATE + env.ENVIRONMENT }}
+          NAMESPACE: ${{ format('{0}{1}', secrets.LICENSE_PLATE, env.ENVIRONMENT) }}
           DC_TEMPLATE: 'api-dc-template.yaml'
           IMAGE_TAG: ${{ env.IMAGE_TAG }}
           ENVIRONMENT: ${{ env.ENVIRONMENT }}
@@ -83,7 +83,7 @@ jobs:
       # Check Deployment Status
       - name: Check Deployment Status
         run: |
-          oc rollout status -n ${{ secrets.LICENSE_PLATE + env.ENVIRONMENT }} dc/pims-api --watch
+          oc rollout status -n ${{ format('{0}{1}', secrets.LICENSE_PLATE, env.ENVIRONMENT) }} dc/pims-api --watch
 
   # Job to clean up previous objects in OpenShift
   Clean-Up:
@@ -96,21 +96,21 @@ jobs:
         uses: redhat-actions/oc-login@v1
         env:
           OPENSHIFT_USER: github-actions
-          OPENSHIFT_PROJECT: ${{ secrets.LICENSE_PLATE + env.ENVIRONMENT }}
+          OPENSHIFT_PROJECT: ${{ format('{0}{1}', secrets.LICENSE_PLATE, env.ENVIRONMENT) }}
         with:
           openshift_server_url: ${{ secrets.OPENSHIFT_SERVER_URL }}
           openshift_token: ${{env.OPENSHIFT_TOKEN}}
-          namespace: ${{ secrets.LICENSE_PLATE + env.ENVIRONMENT }}
+          namespace: ${{ format('{0}{1}', secrets.LICENSE_PLATE, env.ENVIRONMENT) }}
 
       # Remove previous objects
       - name: Remove previous objects
         run: |
-          oc delete pod -n ${{ secrets.LICENSE_PLATE + env.ENVIRONMENT }} --field-selector status.phase=Succeeded
+          oc delete pod -n ${{ format('{0}{1}', secrets.LICENSE_PLATE, env.ENVIRONMENT) }} --field-selector status.phase=Succeeded
 
       # Remove previous replication controllers
       - name: Remove previous replication controllers
         run: |
-          oc delete rc -n ${{ secrets.LICENSE_PLATE + env.ENVIRONMENT }} --field-selector status.replicas=0
+          oc delete rc -n ${{ format('{0}{1}', secrets.LICENSE_PLATE, env.ENVIRONMENT) }} --field-selector status.replicas=0
 
   # Job to update the wiki with deployed image tag information
   Update_Wiki_Tags:
