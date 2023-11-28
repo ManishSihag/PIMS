@@ -74,11 +74,11 @@ jobs:
         uses: redhat-actions/oc-login@v1
         env:
           OPENSHIFT_USER: github-actions
-          OPENSHIFT_PROJECT: ${{env.NAMESPACE}}
+          OPENSHIFT_PROJECT: ${{ format('{0}-{1}', secrets.LICENSE_PLATE, env.ENVIRONMENT) }}
         with:
           openshift_server_url: ${{ secrets.OPENSHIFT_SERVER_URL }}
           openshift_token: ${{env.OPENSHIFT_TOKEN}}
-          namespace: ${{env.NAMESPACE}}
+          namespace: ${{ format('{0}-{1}', secrets.LICENSE_PLATE, env.ENVIRONMENT) }}
 
       # Check Deployment Status
       - name: Check Deployment Status
