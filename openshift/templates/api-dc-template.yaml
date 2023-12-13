@@ -229,7 +229,7 @@ parameters:
   - description: Ches__EmailAuthorized
     displayName: Ches__EmailAuthorized
     name: EMAIL_AUTHORIZED
-    value: 'false'
+    required: true
   - description: ImageTag
     displayName: ImageTag
     name: IMAGE_TAG
