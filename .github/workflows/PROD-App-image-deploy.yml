@@ -1,5 +1,5 @@
-# GitHub Actions workflow for deploying APP image to TEST env
-name: TEST APP-Image Deploy
+# GitHub Actions workflow for deploying APP image to PROD env
+name: PROD APP-Image Deploy
 
 on:
   workflow_dispatch:
@@ -10,8 +10,8 @@ on:
 
 env:
   IMAGE_TAG: ${{ github.event.inputs.image_tag }}
-  ENVIRONMENT: 'test'
-  OPENSHIFT_TOKEN: ${{ secrets.OPENSHIFT_SA_TEST_TOKEN }}
+  ENVIRONMENT: 'prod'
+  OPENSHIFT_TOKEN: ${{ secrets.OPENSHIFT_SA_PROD_TOKEN }}
 
 
 jobs:
@@ -121,7 +121,7 @@ jobs:
 
       # Run update wiki python script
       - name: Run update wiki python script
-        run: python ./.github/helpers/update-wiki-table.py ./wiki/Image-tags.md APP "Deployed Image Tag in TEST" "${{ env.IMAGE_TAG }}"
+        run: python ./.github/helpers/update-wiki-table.py ./wiki/Image-tags.md APP "Deployed Image Tag in PROD" "${{ env.IMAGE_TAG }}"
 
       # Commit and push changes to wiki
       - name: Commit and push changes to wiki
