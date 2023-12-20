@@ -1,4 +1,4 @@
- # This docker-compose file is used to build the images for the backend and frontend services at the deployment stage.  
+ ## This docker-compose file is used to build the images for the backend, frontend services and a databse migration image (if any chnage).  
 services:
   ####################### Backend #######################
   backend:
@@ -16,7 +16,7 @@ services:
     ports:
       - 8080:8080
 
-  ####################### Database Migration ##############
+  ################## Database Migration #################
 
   migration:
     build:
