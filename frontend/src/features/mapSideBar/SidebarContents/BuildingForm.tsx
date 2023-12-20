@@ -1,5 +1,6 @@
-import variables from '_variables.module.scss';
 import './BuildingForm.scss';
+
+import variables from '_variables.module.scss';
 import { IBuilding } from 'actions/parcelsActions';
 import {
   ISteppedFormValues,
@@ -22,13 +23,12 @@ import {
 } from 'features/properties/components/forms/subforms/EvaluationForm';
 import LastUpdatedBy from 'features/properties/components/LastUpdatedBy';
 import useDraftMarkerSynchronizer from 'features/properties/hooks/useDraftMarkerSynchronizer';
-import useParcelLayerData from 'features/properties/hooks/useParcelLayerData';
 import { useFormikContext, yupToFormErrors } from 'formik';
 import useKeycloakWrapper from 'hooks/useKeycloakWrapper';
 import useCodeLookups from 'hooks/useLookupCodes';
 import { noop } from 'lodash';
 import _ from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { Button } from 'react-bootstrap';
 import { useAppDispatch } from 'store';
 import styled from 'styled-components';
@@ -42,7 +42,6 @@ import {
 
 import { InventoryPolicy } from '../components/InventoryPolicy';
 import { useBuildingApi } from '../hooks/useBuildingApi';
-import { BuildingForm } from '.';
 import { valuesToApiFormat as landValuesToApiFormat } from './LandForm';
 import { BuildingReviewPage } from './subforms/BuildingReviewPage';
 import { BuildingValuationForm } from './subforms/BuildingValuationForm';
@@ -133,19 +132,11 @@ const Form: React.FC<IBuildingForm> = ({
   nameSpace,
   disabled,
   goToAssociatedLand,
-  formikRef,
   buildingData,
 }) => {
   const stepper = useFormStepper();
   useDraftMarkerSynchronizer('data');
   const formikProps = useFormikContext<ISteppedFormValues<IBuilding>>();
-  useParcelLayerData({
-    formikRef,
-    nameSpace: 'data',
-    agencyId: +(formikProps.values.data.agencyId as any)?.value
-      ? +(formikProps.values.data.agencyId as any).value
-      : +formikProps.values.data.agencyId,
-  });
   const { getOptionsByType, getPropertyClassificationOptions } = useCodeLookups();
   const isViewOrUpdate = !!formikProps.values?.data?.id;
 
@@ -343,7 +334,7 @@ export const valuesToApiFormat = (values: ISteppedFormValues<IBuilding>): IBuild
   return apiValues.data;
 };
 
-const BuidingForm: React.FC<IParentBuildingForm> = ({
+const BuildingForm: React.FC<IParentBuildingForm> = ({
   setMovingPinNameSpace,
   nameSpace,
   isPropertyAdmin,
@@ -489,4 +480,4 @@ const BuidingForm: React.FC<IParentBuildingForm> = ({
   );
 };
 
-export default BuidingForm;
+export default BuildingForm;

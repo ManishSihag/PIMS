@@ -1,5 +1,6 @@
 import FilterBackdrop from 'components/maps/leaflet/FilterBackdrop';
 import { Claims } from 'constants/claims';
+import { Roles } from 'constants/roles';
 import { IENotSupportedPage, Login, Logout } from 'features/account';
 import { ReviewApproveStep } from 'features/projects/assess';
 import { SelectProjectPropertiesPage } from 'features/projects/common';
@@ -32,6 +33,7 @@ import {
 } from 'features/projects/dispose';
 import { ProjectSummary } from 'features/projects/summary';
 import MapView from 'features/properties/map/MapView';
+import { UploadProperties } from 'features/properties/upload/UploadProperties';
 import { IsAuthenticatedRoute, LayoutWrapper, PrivateRoute } from 'features/routes';
 import useKeycloakWrapper from 'hooks/useKeycloakWrapper';
 import { AuthLayout, PublicLayout } from 'layouts';
@@ -224,7 +226,23 @@ export const AppRouter: React.FC = () => {
                 />
               }
             />
+            <Route
+              path="uploadProperties"
+              element={<PrivateRoute role={Roles.SYSTEM_ADMINISTRATOR} />}
+            >
+              <Route
+                path=""
+                element={
+                  <LayoutWrapper
+                    component={UploadProperties}
+                    layout={AuthLayout}
+                    title={getTitle('Upload Properties')}
+                  />
+                }
+              />
+            </Route>
           </Route>
+
           {/**
            * DISPOSE -- /dispose
            * -- When selecting 'Create Disposal Project' from 'Disposal Projects' nav link.

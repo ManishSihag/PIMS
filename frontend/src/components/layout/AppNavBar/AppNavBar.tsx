@@ -134,6 +134,19 @@ function AdminDropdown() {
       >
         Administrative Areas
       </NavDropdown.Item>
+      {
+        // Only allow System Administrators to see this item
+        keycloak.hasRole('System Administrator') ? (
+          <NavDropdown.Item
+            data-testid="navbar-admin-upload-properties"
+            onClick={() => navigate('/admin/uploadProperties')}
+          >
+            Upload Properties
+          </NavDropdown.Item>
+        ) : (
+          <></>
+        )
+      }
     </NavDropdown>
   ) : null;
 }

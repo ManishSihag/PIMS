@@ -36,212 +36,225 @@ exports[`Edit agency page EditAgencyPage renders 1`] = `
       class="agency-edit-form-container row"
     >
       <form
-        class="agencyInfo"
+        class=""
         novalidate=""
       >
-        <div
-          class="required row"
-          controlid="input-name"
-          style="align-items: center;"
+        <table
+          class="table-style"
         >
-          <div
-            class="col-md-auto"
-          >
-            <label
-              class="form-label"
+          <tr>
+            <td
+              class="left-col"
             >
-              Agency
-            </label>
-          </div>
-          <div
-            class="col-md-auto"
-          >
-            <div>
-              <input
-                aria-label="Agency"
-                class="form-control"
-                name="name"
-                type="text"
-                value="Test Agency"
-              />
-            </div>
-          </div>
-        </div>
-        <div
-          class="required row"
-          controlid="input-code"
-          style="align-items: center;"
-        >
-          <div
-            class="col-md-auto"
-          >
-            <label
-              class="form-label"
-            >
-              Short Name (Code)
-            </label>
-          </div>
-          <div
-            class="col-md-auto"
-          >
-            <div>
-              <input
-                aria-label="Short Name (Code)"
-                class="form-control"
-                name="code"
-                type="text"
-                value="TEST"
-              />
-            </div>
-          </div>
-        </div>
-        <div
-          class="row"
-          controlid="input-parentId"
-          style="align-items: center;"
-        >
-          <div
-            class="col-md-auto"
-          >
-            <label
-              class="form-label"
-            >
-              Parent Agency - If applicable
-            </label>
-          </div>
-          <div
-            class="col-md-auto"
-            style="padding: 0px;"
-          >
-            <select
-              class="form-select form-control"
-              disabled=""
-              name="parentId"
-              style="margin-bottom: 10px; width: 250px;"
-            >
-              <option
-                value=""
+              <div
+                class="form-label"
               >
-                No parent
-              </option>
-              <option
-                class="option"
-                value="111"
+                Agency
+              </div>
+            </td>
+            <td
+              class="right-col"
+            >
+              <div
+                class="required input-flex"
+                id="input-name"
               >
-                Test Agency
-              </option>
-            </select>
-          </div>
-        </div>
-        <div
-          class="row"
-          controlid="input-description"
-          style="align-items: center;"
-        >
-          <div
-            class="col-md-auto"
-          >
-            <label
-              class="form-label"
+                <div>
+                  <input
+                    aria-label="Agency"
+                    class="form-text-field form-control"
+                    name="name"
+                    type="text"
+                    value="Test Agency"
+                  />
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td
+              class="left-col"
             >
-              Description
-            </label>
-          </div>
-          <div
-            class="col-md-auto"
-          >
-            <div>
-              <input
-                class="form-control"
-                name="description"
-                type="text"
-                value=""
-              />
-            </div>
-          </div>
-        </div>
-        <div
-          class="row"
-          controlid="input-email"
-          style="align-items: center;"
-        >
-          <div
-            class="col-md-auto"
-          >
-            <label
-              class="form-label"
+              <div
+                class="form-label"
+              >
+                Short Name (Code)
+              </div>
+            </td>
+            <td
+              class="right-col"
             >
-              Email address
-            </label>
-          </div>
-          <div
-            class="col-md-auto"
-          >
-            <div>
-              <input
-                aria-label="Email address"
-                class="form-control"
-                name="email"
-                type="text"
-                value="test@email.com"
-              />
-            </div>
-          </div>
-        </div>
-        <div
-          class="row"
-          controlid="input-addressTo"
-          style="align-items: center;"
-        >
-          <div
-            class="col-md-auto"
-          >
-            <label
-              class="form-label"
+              <div
+                class="required input-flex"
+                id="input-code"
+              >
+                <div>
+                  <input
+                    aria-label="Short Name (Code)"
+                    class="form-text-field form-control"
+                    name="code"
+                    type="text"
+                    value="TEST"
+                  />
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td
+              class="left-col"
             >
-              Addressed To
-            </label>
-          </div>
-          <div
-            class="col-md-auto"
-          >
-            <div>
-              <input
-                class="form-control"
-                name="addressTo"
-                type="text"
-                value="Good morning"
-              />
-            </div>
-          </div>
-        </div>
-        <div
-          class="row"
-          controlid="input-ccEmail"
-          style="align-items: center;"
-        >
-          <div
-            class="col-md-auto"
-          >
-            <label
-              class="form-label"
+              <div
+                class="form-label"
+              >
+                Parent Agency - If applicable
+              </div>
+            </td>
+            <td
+              class="right-col"
             >
-              CC Email address
-            </label>
-          </div>
-          <div
-            class="col-md-auto"
-          >
-            <div>
-              <input
-                class="form-control"
-                name="ccEmail"
-                type="text"
-                value=""
-              />
-            </div>
-          </div>
-        </div>
+              <div
+                class="select-row row"
+                controlid="input-parentId"
+              >
+                <div
+                  class="select-column col-md-auto"
+                >
+                  <select
+                    class="form-select-field form-select form-control"
+                    disabled=""
+                    name="parentId"
+                  >
+                    <option
+                      value=""
+                    >
+                      No parent
+                    </option>
+                    <option
+                      class="option"
+                      value="111"
+                    >
+                      Test Agency
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td
+              class="left-col"
+            >
+              <div
+                class="form-label"
+              >
+                Description
+              </div>
+            </td>
+            <td
+              class="right-col"
+            >
+              <div
+                class="input-flex"
+                id="input-description"
+              >
+                <div>
+                  <input
+                    class="form-text-field form-control"
+                    name="description"
+                    type="text"
+                    value=""
+                  />
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td
+              class="left-col"
+            >
+              <div
+                class="form-label"
+              >
+                Email address
+              </div>
+            </td>
+            <td
+              class="right-col"
+            >
+              <div
+                class="input-flex"
+                id="input-email"
+              >
+                <div>
+                  <input
+                    aria-label="Email address"
+                    class="form-text-field form-control"
+                    name="email"
+                    type="text"
+                    value="test@email.com"
+                  />
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td
+              class="left-col"
+            >
+              <div
+                class="form-label"
+              >
+                Addressed To
+              </div>
+            </td>
+            <td
+              class="right-col"
+            >
+              <div
+                class="input-flex"
+                id="input-addressTo"
+              >
+                <div>
+                  <input
+                    class="form-text-field form-control"
+                    name="addressTo"
+                    type="text"
+                    value="Good morning"
+                  />
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td
+              class="left-col"
+            >
+              <div
+                class="form-label"
+              >
+                CC Email address
+              </div>
+            </td>
+            <td
+              class="right-col"
+            >
+              <div
+                class="input-flex"
+                id="input-ccEmail"
+              >
+                <div>
+                  <input
+                    class="form-text-field form-control"
+                    name="ccEmail"
+                    type="text"
+                    value=""
+                  />
+                </div>
+              </div>
+            </td>
+          </tr>
+        </table>
         <hr />
         <div
           class="checkboxes row"

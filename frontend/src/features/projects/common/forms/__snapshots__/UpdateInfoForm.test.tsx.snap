@@ -38,16 +38,11 @@ exports[`Update Info Form Matches Snapshot 1`] = `
         class="col-md-auto"
       >
         <div
-          class="required col-md-1 row"
+          class="required col-md-1 select-row row"
           controlid="input-tierLevelId"
-          style="align-items: center;"
         >
           <div
-            class="col-md-auto"
-          />
-          <div
-            class="col-md-auto"
-            style="padding: 0px;"
+            class="select-column col-md-auto"
           >
             <select
               class="form-select form-control"
@@ -714,11 +709,9 @@ exports[`Update Info Form Matches Snapshot 1`] = `
                     style="box-sizing: border-box; flex: 60 0 auto; min-width: 30px; width: 60px; justify-content: flex-start; text-align: left; align-items: flex-start; display: flex;"
                     title="Click to view property details"
                   >
-                    <svg
-                      class="svg"
-                    >
-                      icon-lot.svg
-                    </svg>
+                    <template>
+                      <svg />
+                    </template>
                   </div>
                 </div>
               </div>
