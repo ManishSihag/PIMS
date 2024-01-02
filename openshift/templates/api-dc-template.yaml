@@ -40,7 +40,7 @@ objects:
             kind: ImageStreamTag
             namespace: ${LICENSE_PLATE}-tools
             name: 'pims-api:${IMAGE_TAG}'
-    replicas: 2
+    replicas: 1
     revisionHistoryLimit: 10
     test: false
     selector:
