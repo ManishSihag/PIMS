@@ -1,0 +1,154 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: pims-express-api-template
+labels:
+  template: pims-express-api-template
+objects:
+- kind: DeploymentConfig
+  apiVersion: apps.openshift.io/v1
+  metadata:
+    annotations:
+      app.openshift.io/connects-to: pims-database
+    name: pims-express-api
+    namespace: ${LICENSE_PLATE}-${ENVIRONMENT}
+    labels:
+      app: pims
+      app.kubernetes.io/part-of: pims
+      env: ${ENVIRONMENT}
+      name: pims-express-api
+      role: api
+  spec:
+    strategy:
+      type: Rolling
+      rollingParams:
+        updatePeriodSeconds: 1
+        intervalSeconds: 1
+        timeoutSeconds: 600
+        maxUnavailable: 25%
+        maxSurge: 25%
+      resources: {}
+      activeDeadlineSeconds: 21600
+    triggers:
+      - type: ConfigChange
+      - type: ImageChange
+        imageChangeParams:
+          automatic: true
+          containerNames:
+            - pims-express-api
+          from:
+            kind: ImageStreamTag
+            namespace: ${LICENSE_PLATE}-tools
+            name: 'pims-express-api:${IMAGE_TAG}'
+    replicas: 1
+    revisionHistoryLimit: 10
+    test: false
+    selector:
+      app: pims
+      env: ${ENVIRONMENT}
+      instance: ''
+      role: api
+    template:
+      metadata:
+        name: pims-express-api
+        creationTimestamp: null
+        labels:
+          app: pims
+          env: ${ENVIRONMENT}
+          instance: ''
+          name: pims-express-api
+          role: api
+      spec:
+        containers:
+          - resources:
+              limits:
+                cpu: 150m
+                memory: 1Gi
+              requests:
+                cpu: 50m
+                memory: 100Mi
+            readinessProbe:
+              httpGet:
+                path: /health/ready
+                port: 8080
+                scheme: HTTP
+              initialDelaySeconds: 60
+              timeoutSeconds: 30
+              periodSeconds: 10
+              successThreshold: 1
+              failureThreshold: 3
+            terminationMessagePath: /dev/termination-log
+            name: pims-express-api
+            livenessProbe:
+              httpGet:
+                path: /health/live
+                port: 8080
+                scheme: HTTP
+              initialDelaySeconds: 60
+              timeoutSeconds: 30
+              periodSeconds: 10
+              successThreshold: 1
+              failureThreshold: 3
+            env:
+              - name: FRONTEND_URL
+                valueFrom:
+                   secretKeyRef:
+                    name: pims-secrets
+                    key: FRONTEND_URL
+              - name: BACKEND_URL
+                valueFrom:
+                   secretKeyRef:
+                    name: pims-secrets
+                    key: BACKEND_URL
+              - name: POSTGRES_USER
+                valueFrom:
+                   secretKeyRef:
+                    name: pims-secrets
+                    key: POSTGRES_USER
+              - name: POSTGRES_PASSWORD
+                valueFrom:
+                   secretKeyRef:
+                    name: pims-secrets
+                    key: POSTGRES_PASSWORD
+              - name: POSTGRES_PORT
+                valueFrom:
+                   secretKeyRef:
+                    name: pims-secrets
+                    key: POSTGRES_PORT
+
+              - name: POSTGRES_DB
+                valueFrom:
+                   secretKeyRef:
+                    name: pims-secrets
+                    key: POSTGRES_DB
+              - name: POSTGRES_SERVICE
+                value: postgresql-pims
+            ports:
+              - containerPort: 8080
+                protocol: TCP
+            imagePullPolicy: IfNotPresent
+            terminationMessagePolicy: File
+            image: >-
+              image-registry.openshift-image-registry.svc:5000/${LICENSE_PLATE}-tools/pims-express-api
+        restartPolicy: Always
+        terminationGracePeriodSeconds: 30
+        dnsPolicy: ClusterFirst
+        securityContext: {}
+        schedulerName: default-scheduler
+
+
+
+parameters:
+  - description: Environment
+    displayName: Environment
+    name: ENVIRONMENT
+    required: true
+    value: dev
+  - description: License Plate
+    displayName: License Plate
+    name: LICENSE_PLATE
+    required: true
+  - description: ImageTag
+    displayName: ImageTag
+    name: IMAGE_TAG
+    required: true

@@ -6,7 +6,7 @@ on:
     types: [opened, synchronize, ready_for_review] # Triggered by opened or changed pull requests.
     branches: [main]
     paths:
-      - 'express-api/**' # Triggers on changes to files in the frontend/ directory.
+      - 'express-api/**' # Triggers on changes to files in the express-api/ directory.
 
 jobs:
   PIMS-API-Build-Tag-Push:
