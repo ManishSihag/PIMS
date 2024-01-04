@@ -1,5 +1,5 @@
 # GitHub Actions workflow for building and tagging the API image on PR
-name: DEV API-:Image Build on PR
+name: EXPRESS API-:Image Build on PR
 
 on:
   pull_request:
