@@ -1,0 +1,27 @@
+#login to vault
+
+name: Vault
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Import Secrets
+        id: import-secrets
+        uses: hashicorp/vault-action@v2
+        with:
+          Url: https://vault.developer.gov.bc.ca
+          Method: token
+          token: ${{ secrets.VAULT_SA_TOKEN }}
+          caCertificate: ${{ secrets.VAULT_CA_CERT }}
+          secrets: |
+            secret/ec1236-nonprod/helloworld hi | HI_STRING
+    
+      - name: Print Secrets
+        env:
+          HI_STRING: ${{ env.HI_STRING }}
+        run: |
+          echo $HI_STRING
