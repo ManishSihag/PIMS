@@ -14,8 +14,9 @@ jobs:
         uses: hashicorp/vault-action@v2
         with:
           url: https://vault.developer.gov.bc.ca
+          namespace: platform-services
           token: ${{ secrets.VAULT_SA_TOKEN }}
-          caCertificate: ${{ secrets.VAULT_CA_CERT }}
+          #caCertificate: ${{ secrets.VAULT_CA_CERT }}
           secrets: |
             ec1236-nonprod/data/helloworld hi | HI_STRING;
     
