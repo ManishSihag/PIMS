@@ -16,7 +16,7 @@ jobs:
           url: https://vault.developer.gov.bc.ca
           token: ${{ secrets.VAULT_SA_TOKEN }}
           secrets: |
-            ec1236-nonprod/data/helloworld hi | HI_STRING
+            ec1236-nonprod/data/helloworld hi | HI_STRING;
     
       - name: Print Secrets
         env:
