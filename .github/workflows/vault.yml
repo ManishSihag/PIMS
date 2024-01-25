@@ -15,6 +15,7 @@ jobs:
         with:
           url: https://vault.developer.gov.bc.ca
           token: ${{ secrets.VAULT_SA_TOKEN }}
+          caCertificate: ${{ secrets.VAULT_CA_CERT }}
           secrets: |
             ec1236-nonprod/data/helloworld hi | HI_STRING;
     
