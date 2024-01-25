@@ -17,7 +17,7 @@ jobs:
           caCertificate : ${{ secrets.VAULT_CA_CERT }}
           token: ${{ secrets.VAULT_SA_TOKEN }}
           secrets: |
-            ec1236-non-prod/data/helloworld hi | HI_STRING
+            ec1236-nonprod/data/helloworld hi | HI_STRING
     
       - name: Print Secrets
         env:
