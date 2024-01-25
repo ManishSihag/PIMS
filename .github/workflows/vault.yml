@@ -13,8 +13,8 @@ jobs:
         id: import-secrets
         uses: hashicorp/vault-action@v2
         with:
-          Url: https://vault.developer.gov.bc.ca
-          Method: token
+          url: https://vault.developer.gov.bc.ca
+          method: jwt
           token: ${{ secrets.VAULT_SA_TOKEN }}
           secrets: |
             secret/ec1236-nonprod/helloworld hi | HI_STRING
