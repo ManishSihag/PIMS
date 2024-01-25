@@ -14,10 +14,10 @@ jobs:
         uses: hashicorp/vault-action@v2
         with:
           url: https://vault.developer.gov.bc.ca
-          method: jwt
+          caCertificate : ${{ secrets.VAULT_CA_CERT }}
           token: ${{ secrets.VAULT_SA_TOKEN }}
           secrets: |
-            secret/ec1236-nonprod/helloworld hi | HI_STRING
+            ec1236-non-prod/data/helloworld hi | HI_STRING
     
       - name: Print Secrets
         env:
