@@ -52,6 +52,24 @@ objects:
       metadata:
         name: pims-api
         creationTimestamp: null
+        annotations:
+          # 1. Vault injector configuration goes here, inside the template.
+          vault.hashicorp.com/agent-inject: 'true'
+          vault.hashicorp.com/agent-inject-token: 'false' # set to 'true' if you are going to connect and query vault from your application
+          vault.hashicorp.com/agent-pre-populate-only: 'true' # this makes sure the secret vault will only change during pod restart
+          vault.hashicorp.com/auth-path: auth/k8s-silver  # This was tricky.  Be sure to use k8s-silver, k8s-gold, or k8s-golddr
+          vault.hashicorp.com/namespace: platform-services
+          vault.hashicorp.com/role: ec1236-nonprod  # licenseplate-nonprod or licenseplate-prod are your options
+
+          # Configure how to retrieve and populate the secrets from Vault:
+          # - The name of the secret is any unique string after vault.hashicorp.com/agent-inject-secret-<name>
+          # - The value is the path in Vault where the secret is located.
+          vault.hashicorp.com/agent-inject-secret-pims-api-secret-dev: ec1236-nonprod/helloWorld2
+          # - The template Vault Agent should use for rendering a secret:
+          vault.hashicorp.com/agent-inject-template-pims-api-secret-dev: |
+            {{- with secret "ec1236-nonprod/helloWorld2" }}
+            export MANISH ="{{ .Data.data.manish }}"
+            {{- end `}} }}
         labels:
           app: pims
           env: ${ENVIRONMENT}
@@ -59,7 +77,10 @@ objects:
           name: pims-api
           role: api
       spec:
+        serviceAccountName: ec1236-vault
         containers:
+          # args:
+          # - ['sh', '-c', 'source /vault/secrets/helloWorld2 && cat /vault/secrets/helloWorld2 ']
           - resources:
               limits:
                 cpu: 150m
