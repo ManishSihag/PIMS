@@ -68,7 +68,7 @@ objects:
           # - The template Vault Agent should use for rendering a secret:
           vault.hashicorp.com/agent-inject-template-pims-api-secret-dev: |
             {{- with secret "ec1236-nonprod/helloWorld2" }}
-            export MANISH="{{ .Data.data.manish }}"
+            {{ .Data.data.manish }}
             {{- end `}} }}
         labels:
           app: pims
