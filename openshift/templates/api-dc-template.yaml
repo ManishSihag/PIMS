@@ -64,12 +64,12 @@ objects:
           # Configure how to retrieve and populate the secrets from Vault:
           # - The name of the secret is any unique string after vault.hashicorp.com/agent-inject-secret-<name>
           # - The value is the path in Vault where the secret is located.
-          vault.hashicorp.com/agent-inject-secret-helloWorld2: 'ec1236-nonprod/helloWorld2'
+          vault.hashicorp.com/agent-inject-secret-helloWorld3: 'ec1236-nonprod/helloWorld3'
           # - The template Vault Agent should use for rendering a secret:
-          vault.hashicorp.com/agent-inject-template-helloWorld2: |
-            {{- with secret "ec1236-nonprod/helloWorld2" }}
+          vault.hashicorp.com/agent-inject-template-helloWorld3: |
+            {{- with secret "ec1236-nonprod/helloWorld3" }}
             {{ .Data.data.manish }}
-            {{- end `}} }}
+            {{- end }}
         labels:
           app: pims
           env: ${ENVIRONMENT}
