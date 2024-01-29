@@ -102,7 +102,7 @@ objects:
             - /bin/sh
             args:
               - '-c'
-              - 'source /vault/secrets/helloword3'
+              - '. /vault/secrets/helloword3'
             livenessProbe:
               httpGet:
                 path: /health/live
