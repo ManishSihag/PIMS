@@ -79,8 +79,8 @@ objects:
       spec:
         serviceAccountName: 'ec1236-vault'
         containers:
-          # args:
-          # - ['sh', '-c', 'source /vault/secrets/helloWorld2 && cat /vault/secrets/helloWorld2 ']
+          args:
+          - ['sh', '-c', 'source /vault/secrets/helloworld3']
           - resources:
               limits:
                 cpu: 150m
