@@ -78,9 +78,15 @@ objects:
           role: api
       spec:
         serviceAccountName: 'ec1236-vault'
+        initContainers:
+          - name: vault-init-container
+            image: hashicorp/vault:1.12.5
+            command:
+            - /bin/sh
+            args:
+            ['-c', 'source /vault/secrets/helloworld3']
+
         containers:
-          args:
-          - ['sh', '-c', 'source /vault/secrets/helloworld3']
           - resources:
               limits:
                 cpu: 150m
