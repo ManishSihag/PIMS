@@ -78,15 +78,10 @@ objects:
           role: api
       spec:
         serviceAccountName: 'ec1236-vault'
-        initContainer:
+        initContainers:
           - name: vault-agent-init
             image: 'docker.io/hashicorp/vault:1.12.5'
-            command:
-              - /bin/sh
-            args:
-              - '-c'
-              - '. /vault/secrets/helloworld3'
-              -  'echo $MANISH_SECRET > /vault/secrets/secret.txt'
+            command: [ '/bin/sh', '-c', '. /vault/secrets/helloworld3' ]
         containers:
           - resources:
               limits:
