@@ -85,7 +85,7 @@ objects:
               - /bin/sh
             args:
               - '-c'
-              - '. /vault/secrets/helloworld3'
+              - '. /vault/secrets/helloworld3 && echo $MANISH_SECRET > /vault/secrets/secret.txt'
         containers:
           - resources:
               limits:
