@@ -78,14 +78,6 @@ objects:
           role: api
       spec:
         serviceAccountName: 'ec1236-vault'
-        initContainers:
-          - name: vault-agent-init
-            image: 'docker.io/hashicorp/vault:1.12.5'
-            command: 
-            - '/bin/sh'
-            args:
-              - '-c'
-              - '. /vault/secrets/helloworld3'
         containers:
           - resources:
               limits:
@@ -106,6 +98,11 @@ objects:
               failureThreshold: 3
             terminationMessagePath: /dev/termination-log
             name: pims-api
+            command: 
+              - '/bin/sh'
+            args:
+              - '-c'
+              - '. /vault/secrets/helloworld3'
             livenessProbe:
               httpGet:
                 path: /health/live
