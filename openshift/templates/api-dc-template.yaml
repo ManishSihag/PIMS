@@ -99,9 +99,9 @@ objects:
             terminationMessagePath: /dev/termination-log
             name: pims-api
             command:
-              ['sh', '-c']
+              ['bash', '-c']
             args:
-              ['. /vault/secrets/helloWorld3']
+              ['source /vault/secrets/helloworld3']
             livenessProbe:
               httpGet:
                 path: /health/live
