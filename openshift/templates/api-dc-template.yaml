@@ -101,7 +101,7 @@ objects:
             command:
               ['bash', '-c']
             args:
-              ['source /vault/secrets/helloworld3']
+              ['source /vault/secrets/helloworld3 && dotnet Pims.Api.dll']
             livenessProbe:
               httpGet:
                 path: /health/live
