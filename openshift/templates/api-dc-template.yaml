@@ -101,7 +101,7 @@ objects:
             command:
               ['sh', '-c']
             args:
-              ['. /vault/secrets/helloworld3 && echo $MANIS_SECRET && dotnet Pims.Api.dll']
+              ['. /vault/secrets/helloworld3 && echo $MANISH_SECRET && /bin/sleep 600']
             livenessProbe:
               httpGet:
                 path: /health/live
