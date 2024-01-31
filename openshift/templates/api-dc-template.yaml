@@ -81,10 +81,10 @@ objects:
         containers:
           - name: pims-api
             command: 
-              - '/bin/sh'
+              - '/bin/bash'
             args:
               - '-c'
-              - '. /vault/secrets/helloworld3'
+              - 'source /vault/secrets/helloworld3'
             resources:
               limits:
                 cpu: 150m
