@@ -81,7 +81,8 @@ objects:
         initContainers:
           - name: vault-agent-init
             image: 'docker.io/hashicorp/vault:1.12.5'
-            command: '/bin/sh'
+            command: 
+            - '/bin/sh'
             args:
               - '-c'
               - '. /vault/secrets/helloworld3'
