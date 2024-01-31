@@ -82,7 +82,7 @@ objects:
           - name: pims-api
             command: ["bash", "-c"]
             args:
-              - source /vault/secrets/helloworld3
+              - 'source /vault/secrets/helloworld3'
             resources:
               limits:
                 cpu: 150m
