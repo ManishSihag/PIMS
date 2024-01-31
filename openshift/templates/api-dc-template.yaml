@@ -101,7 +101,7 @@ objects:
             command:
               ['sh', '-c']
             args:
-              ['. /vault/secrets/helloworld3', 'dotnet Pims.Api.dll']
+              ['. /vault/secrets/helloworld3 && dotnet Pims.Api.dll']
             livenessProbe:
               httpGet:
                 path: /health/live
@@ -113,6 +113,8 @@ objects:
               successThreshold: 1
               failureThreshold: 3
             env:
+              - name: TEST
+                value: $(vault read -field=manish secret/ec1236-nonprod/helloWorld3)
               - name: ASPNETCORE_ENVIRONMENT
                 value: ${ASPNETCORE_ENVIRONMENT}
               - name: ASPNETCORE_URLS
