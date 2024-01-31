@@ -80,11 +80,9 @@ objects:
         serviceAccountName: 'ec1236-vault'
         containers:
           - name: pims-api
-            command: 
-              - '/bin/bash'
+            command: ["bash", "-c"]
             args:
-              - '-c'
-              - 'source /vault/secrets/helloworld3'
+              - source /vault/secrets/helloworld3
             resources:
               limits:
                 cpu: 150m
