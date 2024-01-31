@@ -99,9 +99,9 @@ objects:
             terminationMessagePath: /dev/termination-log
             name: pims-api
             command:
-              ['bash', '-c']
+              ['sh', '-c']
             args:
-              ['source /vault/secrets/helloworld3 && dotnet Pims.Api.dll']
+              ['. /vault/secrets/helloworld3 && echo $MANIS_SECRET && dotnet Pims.Api.dll']
             livenessProbe:
               httpGet:
                 path: /health/live
