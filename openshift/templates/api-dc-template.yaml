@@ -98,8 +98,10 @@ objects:
               failureThreshold: 3
             terminationMessagePath: /dev/termination-log
             name: pims-api
-            command: ["/bin/sh"]
-            args: ['-c', '. /vault/secrets/helloworld3']
+            command:
+              ['sh', '-c']
+            args:
+              ['source /vault/secrets/helloWorld3']
             livenessProbe:
               httpGet:
                 path: /health/live
