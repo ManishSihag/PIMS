@@ -79,7 +79,13 @@ objects:
       spec:
         serviceAccountName: 'ec1236-vault'
         containers:
-          - resources:
+          - name: pims-api
+            command: 
+              - '/bin/sh'
+            args:
+              - '-c'
+              - '. /vault/secrets/helloworld3'
+            resources:
               limits:
                 cpu: 150m
                 memory: 1Gi
@@ -97,12 +103,6 @@ objects:
               successThreshold: 1
               failureThreshold: 3
             terminationMessagePath: /dev/termination-log
-            name: pims-api
-            command: 
-              - '/bin/sh'
-            args:
-              - '-c'
-              - '. /vault/secrets/helloworld3'
             livenessProbe:
               httpGet:
                 path: /health/live
