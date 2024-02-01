@@ -28,6 +28,6 @@ services:
   express:
     build:
       context: express-api
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.ocp
     ports:
       - 8080:8080
