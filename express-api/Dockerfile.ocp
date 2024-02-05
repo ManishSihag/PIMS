@@ -14,7 +14,7 @@ ENV CONTAINERIZED=true
 COPY . .
 
 # Install all dependencies
-RUN npm install --omit=dev
+RUN npm i
 
 # Generate swagger-output
 RUN npm run swagger
@@ -32,6 +32,10 @@ WORKDIR /express-api
 
 ENV NODE_ENV=production
 ENV CONTAINERIZED=true
+
+# Install packages. Needed even for compiled build.
+COPY package.json .
+RUN npm i
 
 # Add curl for health check
 RUN apt-get update && apt-get install -y curl
