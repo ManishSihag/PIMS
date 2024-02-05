@@ -14,7 +14,7 @@ ENV CONTAINERIZED=true
 COPY . .
 
 # Install all dependencies
-RUN npm i
+RUN npm i --production=false
 
 # Generate swagger-output
 RUN npm run swagger
