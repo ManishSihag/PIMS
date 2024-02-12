@@ -35,7 +35,7 @@ jobs:
        # Build the API Image 
       - name: Build API Image
         run: |
-          cd express-api && docker build -t ${{ secrets.PUBLIC_IMAGE_REPOSITORY }}/${{ secrets.OPENSHIFT_TOOLS_NAMESPACE }}/pims-api-v2:${{github.event.pull_request.number}} -f Dockerfile .
+          cd express-api && docker build -t ${{ secrets.PUBLIC_IMAGE_REPOSITORY }}/${{ secrets.OPENSHIFT_TOOLS_NAMESPACE }}/pims-express-api:${{github.event.pull_request.number}} -f Dockerfile .
 
       # Push the API Image
       - name: Push API Image
